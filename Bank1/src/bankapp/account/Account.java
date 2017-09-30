@@ -5,7 +5,7 @@ public class Account {
 	 * The number of the account.
 	 */
 	int nr;
-	/**
+	/** 
 	 * The PIN of the account.
 	 */
 	String pin;
