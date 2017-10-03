@@ -1,18 +1,18 @@
 package bankapp.account;
 
-public class Account {
+public abstract class Account {
 	/**
 	 * The number of the account.
 	 */
-	int nr;
+	protected int nr;
 	/** 
 	 * The PIN of the account.
 	 */
-	String pin;
+	protected String pin;
 	/**
 	 * The account balance.
 	 */
-	double balance;
+	protected double balance;
 
 	/**
 	 * Constructs a bank account.

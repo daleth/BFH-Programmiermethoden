@@ -16,6 +16,8 @@ public class ATM {
 	private Scanner scanner = new Scanner(System.in);
 	/** The bank to which the ATM is connected. */
 	private Bank bank;
+	/** The default initial balance when creating a new BankAccount */
+	private static final double DEFAULT_INITIAL_BALANCE = 0.0; 
 
 	/**
 	 * Construct an automated teller machine.
@@ -71,12 +73,24 @@ public class ATM {
 	}
 
 	private void openAccount() {
-		System.out.println("Creating bankaccount...");
-		int nr = bank.openAccount(this.scanPin());
+		System.out.println("Creating bankaccount. Please Choose the Account type: ");
+		System.out.println("P: Personal Account");
+		System.out.println("S: Savings Account");
+		String choice = scanner.nextLine().toUpperCase();
+		int nr = 0;
+		switch (choice) {
+		case "P":
+			nr = bank.openPersonalAccount(this.scanPin(), DEFAULT_INITIAL_BALANCE);
+			break;
+		case "S":
+			nr = bank.openSavingsAccount(this.scanPin(), DEFAULT_INITIAL_BALANCE);
+			break;
+		default:
+			System.out.println("Invalid input");
+		}
 		System.out.printf("Account with accountnumber %d created %n", nr);
-
 	}
-
+	
 	private void getBalance() {
 		System.out.println("You chose to display the balance: ");
 		System.out.printf("The balance of your account is: %.2f %n", bank.getBalance(this.scanNr(), this.scanPin()));

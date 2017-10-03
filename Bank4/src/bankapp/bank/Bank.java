@@ -2,6 +2,8 @@ package bankapp.bank;
 
 import java.util.ArrayList;
 import bankapp.account.Account;
+import bankapp.account.PersonalAccount;
+import bankapp.account.SavingsAccount;
 
 /**
  * 
@@ -26,7 +28,7 @@ public class Bank {
 	 * @return true if the account has been closed, or false if an error occurred
 	 */
 	public boolean closeAccount(int nr, String pin) {
-		Account account = this.findAccount(nr); 
+		Account account = this.findAccount(nr);
 		if (account != null && account.checkPIN(pin)) {
 			return this.accounts.remove(account);
 		} else {
@@ -96,7 +98,7 @@ public class Bank {
 	}
 
 	/**
-	 * Opens a bank account.
+	 * Opens a personal bank account.
 	 * 
 	 * @param pin
 	 *            - the PIN of the account
@@ -104,20 +106,23 @@ public class Bank {
 	 *            - the initial balance
 	 * @return the account number
 	 */
-	public int openAccount(String pin, double balance) {
-		accounts.add(new Account(++this.lastAccountNr, pin, balance));
-		return lastAccountNr;
+	public int openPersonalAccount(String pin, double balance) {
+		accounts.add(new PersonalAccount(++this.lastAccountNr, pin, balance));
+		return this.lastAccountNr; 
 	}
 
 	/**
-	 * Opens a bank account with the balance of 0.
+	 * Opens a savings bank account.
 	 * 
 	 * @param pin
 	 *            - the PIN of the account
+	 * @param balance
+	 *            - the initial balance
 	 * @return the account number
 	 */
-	public int openAccount(String pin) {
-		return this.openAccount(pin, 0.0);
+	public int openSavingsAccount(String pin, double balance) {
+		accounts.add(new SavingsAccount(++this.lastAccountNr, pin, balance));
+		return this.lastAccountNr;
 	}
 
 	/**

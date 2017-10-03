@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-public class AccountTest {
+public class PersonalAccountTest {
 
 	private static final int NR = 1;
 	private static final String PIN = "12345";
@@ -19,7 +19,7 @@ public class AccountTest {
 
 	@Before
 	public void init() {
-		account = new Account(NR, PIN, BALANCE);
+		account = new PersonalAccount(NR, PIN, BALANCE);
 	}
 
 	@Test
