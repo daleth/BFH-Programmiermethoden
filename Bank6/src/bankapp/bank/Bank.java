@@ -47,10 +47,14 @@ public interface Bank {
 	Double getBalance(int nr, String pin);
 
 	/**
+	 * Opens a bank account.
 	 * 
-	 * @param pin
-	 * @param balance
 	 * @param type
+	 *            - the account type
+	 * @param pin
+	 *            - the PIN of the account
+	 * @param balance
+	 *            - the initial balance
 	 * @return
 	 */
 	int openAccount(AccountType type, String pin, double balance);
