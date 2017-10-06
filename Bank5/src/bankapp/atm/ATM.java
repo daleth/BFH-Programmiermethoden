@@ -81,10 +81,10 @@ public class ATM {
 		int nr = 0;
 		switch (choice) {
 		case "P":
-			nr = bank.openAccount(this.scanPin(), DEFAULT_INITIAL_BALANCE, AccountType.PERSONAL);
+			nr = bank.openAccount( AccountType.PERSONAL, this.scanPin(), DEFAULT_INITIAL_BALANCE);
 			break;
 		case "S":
-			nr = bank.openAccount(this.scanPin(), DEFAULT_INITIAL_BALANCE, AccountType.SAVINGS);
+			nr = bank.openAccount(AccountType.SAVINGS, this.scanPin(), DEFAULT_INITIAL_BALANCE);
 			break;
 		default:
 			System.out.println("Invalid input");

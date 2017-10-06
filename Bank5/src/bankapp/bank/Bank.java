@@ -124,8 +124,14 @@ public class Bank {
 		accounts.add(new SavingsAccount(++this.lastAccountNr, pin, balance));
 		return this.lastAccountNr;
 	}
-
-	public int openAccount(String pin, double balance, AccountType type) {
+/**
+ * 
+ * @param pin
+ * @param balance
+ * @param type
+ * @return
+ */
+	public int openAccount(AccountType type, String pin, double balance) {
 		int accountNumber=0;
 		switch (type) {
 		case PERSONAL:
