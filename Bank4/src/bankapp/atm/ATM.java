@@ -128,7 +128,9 @@ public class ATM {
 
 	private void listAccounts() {
 		for (Account account : bank.getAccounts()) {
-			System.out.println(account.toString());
+			
+//			System.out.println(account.toString());
+			System.out.printf("%-4d%+12.2f\n", account.getNr(), account.getBalance());
 		}
 	}
 
