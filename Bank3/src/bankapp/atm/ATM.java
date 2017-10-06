@@ -124,6 +124,7 @@ public class ATM {
 	}
 
 	private String scanPin() {
+		// TODO: Disallow empty Strings
 		System.out.print("Please enter your PIN: ");
 		return scanner.nextLine();
 	}

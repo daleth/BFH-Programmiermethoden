@@ -45,10 +45,11 @@ public class Bank {
 	 */
 	public boolean deposit(int nr, double amount) {
 		Account account = this.findAccount(nr);
-		if (account != null) {
-			return account.deposit(amount);
-		} else {
+		if (account == null) {
 			return false;
+
+		} else {
+			return account.deposit(amount);
 		}
 	}
 
@@ -133,10 +134,18 @@ public class Bank {
 	 */
 	public boolean withdraw(int nr, String pin, double amount) {
 		Account account = this.findAccount(nr);
-		if (account != null && account.checkPIN(pin)) {
+		
+		/*if (account != null && account.checkPIN(pin)) {
 			return account.withdraw(amount);
 		}
-		return false;
+		return false;*/
+		
+		if (account == null || !account.checkPIN(pin)) {
+			return false;
+		}
+		else {
+			return account.withdraw(amount);
+		}
 	}
 
 }
