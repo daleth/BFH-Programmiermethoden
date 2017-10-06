@@ -55,7 +55,7 @@ public interface Bank {
 	 *            - the PIN of the account
 	 * @param balance
 	 *            - the initial balance
-	 * @return
+	 * @return the account number
 	 */
 	int openAccount(AccountType type, String pin, double balance);
 
