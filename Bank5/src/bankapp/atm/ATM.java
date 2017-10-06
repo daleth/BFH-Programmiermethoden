@@ -3,6 +3,7 @@ package bankapp.atm;
 import java.util.Scanner;
 
 import bankapp.account.Account;
+import bankapp.bank.AccountType;
 import bankapp.bank.Bank;
 
 /**
@@ -80,10 +81,10 @@ public class ATM {
 		int nr = 0;
 		switch (choice) {
 		case "P":
-			nr = bank.openPersonalAccount(this.scanPin(), DEFAULT_INITIAL_BALANCE);
+			nr = bank.openAccount(this.scanPin(), DEFAULT_INITIAL_BALANCE, AccountType.PERSONAL);
 			break;
 		case "S":
-			nr = bank.openSavingsAccount(this.scanPin(), DEFAULT_INITIAL_BALANCE);
+			nr = bank.openAccount(this.scanPin(), DEFAULT_INITIAL_BALANCE, AccountType.SAVINGS);
 			break;
 		default:
 			System.out.println("Invalid input");
@@ -130,7 +131,7 @@ public class ATM {
 		for (Account account : bank.getAccounts()) {
 			
 //			System.out.println(account.toString());
-			System.out.printf("%-4d%+12.2f\n", account.getNr(), account.getBalance());
+			System.out.printf("Account Type: %-10s Number: %-4d%+12.2f\n", account.getType(), account.getNr(), account.getBalance());
 		}
 	}
 

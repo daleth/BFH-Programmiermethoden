@@ -1,11 +1,13 @@
 package bankapp.account;
 
+import bankapp.bank.AccountType;
+
 public abstract class Account {
 	/**
 	 * The number of the account.
 	 */
 	protected int nr;
-	/** 
+	/**
 	 * The PIN of the account.
 	 */
 	protected String pin;
@@ -93,6 +95,13 @@ public abstract class Account {
 	}
 
 	/**
+	 * Gets the type of the account.
+	 * 
+	 * @return the account type
+	 */
+	public abstract AccountType getType();
+
+	/**
 	 * Withdraws money from the account.
 	 * 
 	 * @param amount
@@ -102,11 +111,11 @@ public abstract class Account {
 	public boolean withdraw(double amount) {
 		if (amount < 0) {
 			return false;
-		} 
-//		else if (amount > this.getBalance()) {
-//			return false;
-//		} 
-			else {
+		}
+		// else if (amount > this.getBalance()) {
+		// return false;
+		// }
+		else {
 			this.balance = this.balance - amount;
 			return true;
 		}
@@ -127,20 +136,24 @@ public abstract class Account {
 		Account a = (Account) object;
 		return a.nr == nr;
 	}
+
 	/**
 	 * Computes a hash code of the account.
-	 * @return     the hash code of the account
+	 * 
+	 * @return the hash code of the account
 	 */
 	@Override
 	public int hashCode() {
-		return this.nr; 
+		return this.nr;
 	}
+
 	/**
 	 * Generates a string representation of the account.
-	 * @return     a string representation of the account
+	 * 
+	 * @return a string representation of the account
 	 */
 	@Override
 	public String toString() {
-		return String.format("%s: nr = %d, balance = %.2f", this.getClass().getName(), this.nr, this.balance); 
+		return String.format("AccountType = %s, nr = %d, balance = %.2f", this.getType(), this.nr, this.balance);
 	}
 }

@@ -106,7 +106,7 @@ public class Bank {
 	 *            - the initial balance
 	 * @return the account number
 	 */
-	public int openPersonalAccount(String pin, double balance) {
+	private int openPersonalAccount(String pin, double balance) {
 		accounts.add(new PersonalAccount(++this.lastAccountNr, pin, balance));
 		return this.lastAccountNr; 
 	}
@@ -120,11 +120,28 @@ public class Bank {
 	 *            - the initial balance
 	 * @return the account number
 	 */
-	public int openSavingsAccount(String pin, double balance) {
+	private int openSavingsAccount(String pin, double balance) {
 		accounts.add(new SavingsAccount(++this.lastAccountNr, pin, balance));
 		return this.lastAccountNr;
 	}
 
+	public int openAccount(String pin, double balance, AccountType type) {
+		int accountNumber=0;
+		switch (type) {
+		case PERSONAL:
+			accountNumber = openPersonalAccount(pin, balance);
+			break;
+		case SAVINGS: 
+			accountNumber = openSavingsAccount(pin, balance);
+			break;
+		default:
+			break;
+		} 
+		return accountNumber;
+	}
+	
+	
+	
 	/**
 	 * Withdraw money from an account.
 	 * 

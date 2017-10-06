@@ -1,5 +1,7 @@
 package bankapp.account;
 
+import bankapp.bank.AccountType;
+
 /**
  * The class Account represents savings bank accounts.
  * 
@@ -24,6 +26,10 @@ public class SavingsAccount extends Account {
 	 */
 	public SavingsAccount(int nr, String pin, double balance) {
 		super(nr, pin, balance);
+	}
+	
+	public AccountType getType() {
+		return AccountType.SAVINGS;
 	}
 
 	@Override
