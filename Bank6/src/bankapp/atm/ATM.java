@@ -1,5 +1,6 @@
 package bankapp.atm;
 
+import java.util.Collections;
 import java.util.Scanner;
 
 import bankapp.account.Account;
@@ -128,7 +129,11 @@ public class ATM {
 	}
 
 	private void listAccounts() {
+		
+		Collections.sort(bank.getAccounts(), new AccountComparator());
+				
 		for (Account account : bank.getAccounts()) {
+			
 			
 //			System.out.println(account.toString());
 			System.out.printf("Account Type: %-10s Number: %-4d%+12.2f\n", account.getType(), account.getNr(), account.getBalance());
