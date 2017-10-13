@@ -1,5 +1,6 @@
 package bankapp.atm;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
@@ -17,7 +18,7 @@ public class ATM {
 	/** The scanner used to read the console input. */
 	private Scanner scanner = new Scanner(System.in);
 	/** The bank to which the ATM is connected. */
-	private Bank bank;
+	private Bank bank; // Unbedingt über Bank Interface ansprechen, damit die Implementierung stimmt. 
 	/** The default initial balance when creating a new BankAccount */
 	private static final double DEFAULT_INITIAL_BALANCE = 0.0; 
 
@@ -130,9 +131,11 @@ public class ATM {
 
 	private void listAccounts() {
 		
-		Collections.sort(bank.getAccounts(), new AccountComparator());
+		ArrayList<Account> accounts = bank.getAccounts();
+		accounts.sort(new AccountComparator());
+		//Collections.sort(bank.getAccounts(), new AccountComparator());
 				
-		for (Account account : bank.getAccounts()) {
+		for (Account account : accounts) {
 			
 			
 //			System.out.println(account.toString());
