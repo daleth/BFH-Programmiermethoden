@@ -50,13 +50,13 @@ public abstract class Account {
 	 * 
 	 * @param pin
 	 *            - the PIN to check
-	 * 
-	 * @return true if the PIN is valid, false otherwise
+	 * @throws BankException
+	 *             - if the account does not exist or the pin is invalid
 	 */
 	public void checkPIN(String pin) throws BankException {
 		if (!this.pin.equals(pin)) {
 			throw new BankException("Wrong PIN.");
-		} 
+		}
 	}
 
 	/**
@@ -64,9 +64,10 @@ public abstract class Account {
 	 * 
 	 * @param amount
 	 *            - the amount of money to deposit
-	 * @return true if the deposit was successful, false otherwise
+	 * @throws BankException
+	 *             - if the deposit failed
 	 */
-	public void deposit(double amount) throws BankException{
+	public void deposit(double amount) throws BankException {
 		if (amount < 0) {
 			throw new BankException("Not possible to deposit negative amounts");
 		} else {
@@ -104,7 +105,8 @@ public abstract class Account {
 	 * 
 	 * @param amount
 	 *            - the amount of money to withdraw
-	 * @return true if the withdrawal was successful, false otherwise
+	 * @throws BankException
+	 *             - if the withdrawal failed
 	 */
 	public void withdraw(double amount) throws BankException {
 		if (amount < 0) {

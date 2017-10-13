@@ -24,9 +24,9 @@ public class BankImpl implements Bank {
 	 * @see bankapp.bank.Bank#closeAccount(int, java.lang.String)
 	 */
 	public void closeAccount(int nr, String pin) throws BankException {
-			Account account = this.findAccount(nr);
-			account.checkPIN(pin);
-			this.accounts.remove(account);
+		Account account = this.findAccount(nr);
+		account.checkPIN(pin);
+		this.accounts.remove(account);
 
 	}
 
@@ -35,9 +35,9 @@ public class BankImpl implements Bank {
 	 * 
 	 * @see bankapp.bank.Bank#deposit(int, double)
 	 */
-	public void deposit(int nr, double amount) throws BankException{
-			Account account = this.findAccount(nr);
-			account.deposit(amount);
+	public void deposit(int nr, double amount) throws BankException {
+		Account account = this.findAccount(nr);
+		account.deposit(amount);
 	}
 
 	/**
@@ -71,9 +71,9 @@ public class BankImpl implements Bank {
 	 * @see bankapp.bank.Bank#getBalance(int, java.lang.String)
 	 */
 	public Double getBalance(int nr, String pin) throws BankException {
-			Account account = this.findAccount(nr);
-			account.checkPIN(pin);
-			return account.getBalance();
+		Account account = this.findAccount(nr);
+		account.checkPIN(pin);
+		return account.getBalance();
 	}
 
 	/**
@@ -105,11 +105,15 @@ public class BankImpl implements Bank {
 	}
 
 	/**
+	 * Opens a bank account.
 	 * 
 	 * @param pin
+	 *            - the PIN of the account
 	 * @param balance
+	 *            - the initial balance
 	 * @param type
-	 * @return
+	 *            - the account type
+	 * @return the account number
 	 */
 	public int openAccount(AccountType type, String pin, double balance) {
 		int accountNumber = 0;
@@ -135,7 +139,7 @@ public class BankImpl implements Bank {
 		Account account = this.findAccount(nr);
 		account.checkPIN(pin);
 		account.withdraw(amount);
-	
+
 	}
 
 }
