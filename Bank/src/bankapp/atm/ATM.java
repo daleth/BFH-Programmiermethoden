@@ -7,6 +7,7 @@ import java.util.Scanner;
 import bankapp.account.Account;
 import bankapp.bank.AccountType;
 import bankapp.bank.Bank;
+import bankapp.bank.BankException;
 
 /**
  * The class ATM implements the user interface of an automated teller machine.
@@ -96,36 +97,44 @@ public class ATM {
 	
 	private void getBalance() {
 		System.out.println("You chose to display the balance: ");
-		System.out.printf("The balance of your account is: %.2f %n", bank.getBalance(this.scanNr(), this.scanPin()));
+		try {
+			System.out.printf("The balance of your account is: %.2f %n", bank.getBalance(this.scanNr(), this.scanPin()));
+		} catch (BankException e) {
+			System.err.println("Error: " + e.getMessage());
+		}
 
 	}
 
 	private void deposit() {
 		System.out.println("You chose to deposit money on your account. ");
-		if (bank.deposit(this.scanNr(), this.scanAmount())) {
+		try {
+			bank.deposit(this.scanNr(), this.scanAmount());
 			System.out.println("Deposit successful. ");
-		} else {
-			System.out.println("There has been an error.");
+		} catch (BankException e){
+			System.err.println("Error: " + e.getMessage());
 		}
 	}
 
 	private void withdraw() {
 		System.out.println("You chose to withdraw money of your account. ");
-		int nr = this.scanNr();
-		String pin = this.scanPin();
-		double amount = this.scanAmount(); 
-		if (bank.withdraw(nr, pin, amount)) {
+		
+		try {
+			int nr = this.scanNr();
+			String pin = this.scanPin();
+			double amount = this.scanAmount();
+			bank.withdraw(nr, pin, amount);
 			System.out.println("Successful withdrawal.");
-		} else {
-			System.out.println("There has been an Error");
+		} catch (BankException e) {
+			System.err.println("Error: " + e.getMessage());
 		}
 	}
 
 	private void closeAccount() {
-		if (bank.closeAccount(this.scanNr(), this.scanPin())) {
+		try {
+			bank.closeAccount(this.scanNr(), this.scanPin());
 			System.out.println("Your account has been closed");
-		} else {
-			System.out.println("There has been an error while closing your account.");
+		} catch (BankException e) {
+			System.err.println("Error: " + e.getMessage());
 		}
 	}
 

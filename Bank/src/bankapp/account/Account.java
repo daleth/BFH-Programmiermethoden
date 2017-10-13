@@ -1,6 +1,7 @@
 package bankapp.account;
 
 import bankapp.bank.AccountType;
+import bankapp.bank.BankException;
 
 public abstract class Account {
 	/**
@@ -52,12 +53,10 @@ public abstract class Account {
 	 * 
 	 * @return true if the PIN is valid, false otherwise
 	 */
-	public boolean checkPIN(String pin) {
-		if (this.pin.equals(pin)) {
-			return true;
-		} else {
-			return false;
-		}
+	public void checkPIN(String pin) throws BankException {
+		if (!this.pin.equals(pin)) {
+			throw new BankException("Wrong PIN.");
+		} 
 	}
 
 	/**
@@ -67,13 +66,12 @@ public abstract class Account {
 	 *            - the amount of money to deposit
 	 * @return true if the deposit was successful, false otherwise
 	 */
-	public boolean deposit(double amount) {
+	public void deposit(double amount) throws BankException{
 		if (amount < 0) {
-			return false;
+			throw new BankException("Not possible to deposit negative amounts");
 		} else {
 			this.balance = this.balance + amount;
 		}
-		return true;
 	}
 
 	/**
@@ -108,16 +106,15 @@ public abstract class Account {
 	 *            - the amount of money to withdraw
 	 * @return true if the withdrawal was successful, false otherwise
 	 */
-	public boolean withdraw(double amount) {
+	public void withdraw(double amount) throws BankException {
 		if (amount < 0) {
-			return false;
+			throw new BankException("Not possible to withdraw negative amount.");
 		}
 		// else if (amount > this.getBalance()) {
 		// return false;
 		// }
 		else {
 			this.balance = this.balance - amount;
-			return true;
 		}
 	}
 

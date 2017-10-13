@@ -1,6 +1,7 @@
 package bankapp.account;
 
 import bankapp.bank.AccountType;
+import bankapp.bank.BankException;
 
 /**
  * The class Account represents savings bank accounts.
@@ -33,17 +34,19 @@ public class SavingsAccount extends Account {
 	}
 
 	@Override
-	public boolean withdraw(double amount) {
+	public void withdraw(double amount) throws BankException {
 
-		if (amount > balance || amount > WITHDRAW_LIMIT)
-			return false;
+		if (amount > balance)
+			throw new BankException("Balance not sufficient");
+		if (amount > WITHDRAW_LIMIT)
+			throw new BankException("Withdraw limit reached");
 		// if (amount > WITHDRAW_LIMIT) {
 		// return false;
 		// } else if (amount > balance) {
 		// return false;
 		// }
 		else {
-			return super.withdraw(amount);
+			super.withdraw(amount);
 			// CAVE: Must explicit invoke super.withdraw() otherwise
 			// java.lang.StackOverflowError!
 		}

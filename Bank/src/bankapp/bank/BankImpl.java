@@ -18,40 +18,26 @@ public class BankImpl implements Bank {
 	/** The last account number. */
 	private int lastAccountNr = 0;
 
-	/**
-	 * Closes an account.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param nr
-	 *            - the account number
-	 * @param pin
-	 *            - the PIN of the account
-	 * @return true if the account has been closed, or false if an error occurred
+	 * @see bankapp.bank.Bank#closeAccount(int, java.lang.String)
 	 */
-	public boolean closeAccount(int nr, String pin) {
-		Account account = this.findAccount(nr);
-		if (account != null && account.checkPIN(pin)) {
-			return this.accounts.remove(account);
-		} else {
-			return false;
-		}
+	public void closeAccount(int nr, String pin) throws BankException {
+			Account account = this.findAccount(nr);
+			account.checkPIN(pin);
+			this.accounts.remove(account);
+
 	}
 
-	/**
-	 * Deposits money into an account.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param nr
-	 *            - the account number
-	 * @param amount
-	 *            - the amount of money to deposit
-	 * @return true if the amount has been deposited, or false if an error occurred
+	 * @see bankapp.bank.Bank#deposit(int, double)
 	 */
-	public boolean deposit(int nr, double amount) {
-		Account account = this.findAccount(nr);
-		if (account != null) {
-			return account.deposit(amount);
-		} else {
-			return false;
-		}
+	public void deposit(int nr, double amount) throws BankException{
+			Account account = this.findAccount(nr);
+			account.deposit(amount);
 	}
 
 	/**
@@ -61,13 +47,13 @@ public class BankImpl implements Bank {
 	 *            - the account number
 	 * @return the account, or null if the account does not exist
 	 */
-	private Account findAccount(int nr) {
+	private Account findAccount(int nr) throws BankException {
 		for (Account account : accounts) {
 			if (account.getNr() == nr) {
 				return account;
 			}
 		}
-		return null;
+		throw new BankException("Account not found");
 	}
 
 	/**
@@ -79,22 +65,15 @@ public class BankImpl implements Bank {
 		return this.accounts;
 	}
 
-	/**
-	 * Gets the balance of an account.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param nr
-	 *            - the account number
-	 * @param pin
-	 *            - the PIN of the account
-	 * @return the account balance, or null if an error occurred
+	 * @see bankapp.bank.Bank#getBalance(int, java.lang.String)
 	 */
-	public Double getBalance(int nr, String pin) {
-		Account account = this.findAccount(nr);
-		if (account != null && account.checkPIN(pin)) {
+	public Double getBalance(int nr, String pin) throws BankException {
+			Account account = this.findAccount(nr);
+			account.checkPIN(pin);
 			return account.getBalance();
-		} else {
-			return null;
-		}
 	}
 
 	/**
@@ -108,7 +87,7 @@ public class BankImpl implements Bank {
 	 */
 	private int openPersonalAccount(String pin, double balance) {
 		accounts.add(new PersonalAccount(++this.lastAccountNr, pin, balance));
-		return this.lastAccountNr; 
+		return this.lastAccountNr;
 	}
 
 	/**
@@ -124,47 +103,39 @@ public class BankImpl implements Bank {
 		accounts.add(new SavingsAccount(++this.lastAccountNr, pin, balance));
 		return this.lastAccountNr;
 	}
-/**
- * 
- * @param pin
- * @param balance
- * @param type
- * @return
- */
+
+	/**
+	 * 
+	 * @param pin
+	 * @param balance
+	 * @param type
+	 * @return
+	 */
 	public int openAccount(AccountType type, String pin, double balance) {
-		int accountNumber=0;
+		int accountNumber = 0;
 		switch (type) {
 		case PERSONAL:
 			accountNumber = openPersonalAccount(pin, balance);
 			break;
-		case SAVINGS: 
+		case SAVINGS:
 			accountNumber = openSavingsAccount(pin, balance);
 			break;
 		default:
 			break;
-		} 
+		}
 		return accountNumber;
 	}
-	
-	
-	
-	/**
-	 * Withdraw money from an account.
+
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param nr
-	 *            - the account number
-	 * @param pin
-	 *            - the PIN of the account
-	 * @param amount
-	 *            - the amount of money to withdraw
-	 * @return true if the amount has been withdrawn, or false if an error occurred
+	 * @see bankapp.bank.Bank#withdraw(int, java.lang.String, double)
 	 */
-	public boolean withdraw(int nr, String pin, double amount) {
+	public void withdraw(int nr, String pin, double amount) throws BankException {
 		Account account = this.findAccount(nr);
-		if (account != null && account.checkPIN(pin)) {
-			return account.withdraw(amount);
-		}
-		return false;
+		account.checkPIN(pin);
+		account.withdraw(amount);
+	
 	}
 
 }
