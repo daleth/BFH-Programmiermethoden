@@ -51,6 +51,8 @@ public abstract class Account {
 	 *            - the PIN to check
 	 * 
 	 * @return true if the PIN is valid, false otherwise
+	 * @throws BankException
+	 *             - if the PIN is invalid
 	 */
 	public boolean checkPIN(String pin) {
 		if (this.pin.equals(pin)) {
@@ -66,6 +68,8 @@ public abstract class Account {
 	 * @param amount
 	 *            - the amount of money to deposit
 	 * @return true if the deposit was successful, false otherwise
+	 * @throws BankException
+	 *             - if the deposit failed
 	 */
 	public boolean deposit(double amount) {
 		if (amount < 0) {
@@ -107,6 +111,7 @@ public abstract class Account {
 	 * @param amount
 	 *            - the amount of money to withdraw
 	 * @return true if the withdrawal was successful, false otherwise
+	 * @throws BankException - if the withdrawal failed
 	 */
 	public boolean withdraw(double amount) {
 		if (amount < 0) {
