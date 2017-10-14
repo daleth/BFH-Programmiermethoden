@@ -2,7 +2,11 @@ package bankapp.account;
 
 import bankapp.bank.AccountType;
 import bankapp.bank.BankException;
-
+/**
+ * The class Account represents bank accounts.
+ * @author david
+ *
+ */
 public abstract class Account {
 	/**
 	 * The number of the account.

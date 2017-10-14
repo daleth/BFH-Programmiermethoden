@@ -40,11 +40,7 @@ public class SavingsAccount extends Account {
 			throw new BankException("Balance not sufficient");
 		if (amount > WITHDRAW_LIMIT)
 			throw new BankException("Withdraw limit reached");
-		// if (amount > WITHDRAW_LIMIT) {
-		// return false;
-		// } else if (amount > balance) {
-		// return false;
-		// }
+
 		else {
 			super.withdraw(amount);
 			// CAVE: Must explicit invoke super.withdraw() otherwise
