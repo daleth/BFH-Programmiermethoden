@@ -75,10 +75,10 @@ public class ATM {
 				System.err.println("Error: "+ e.getMessage());
 			}
 			catch (NumberFormatException e) {
-				System.err.println("Error: ");
+				System.err.println("Error: Must enter a valid number. ");
 				}
 			catch (NullPointerException e) {
-				System.err.println("Error: "+ e.getMessage());
+				System.err.println("Error: Entered value cannot be null. ");
 				}
 			
 			System.out.println("Hit Enter to continue...");
