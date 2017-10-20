@@ -61,6 +61,7 @@ public abstract class Account {
 		if (!this.pin.equals(pin)) {
 			throw new BankException("Wrong PIN.");
 		}
+		return; //
 	}
 
 	/**
@@ -74,7 +75,7 @@ public abstract class Account {
 	public void deposit(double amount) throws BankException {
 		if (amount < 0) {
 			throw new BankException("Not possible to deposit negative amounts");
-		} else {
+		} else { // Dieses else wäre nicht notwendig. 
 			this.balance = this.balance + amount;
 		}
 	}
@@ -115,11 +116,7 @@ public abstract class Account {
 	public void withdraw(double amount) throws BankException {
 		if (amount < 0) {
 			throw new BankException("Not possible to withdraw negative amount.");
-		}
-		// else if (amount > this.getBalance()) {
-		// return false;
-		// }
-		else {
+		} else {
 			this.balance = this.balance - amount;
 		}
 	}

@@ -48,28 +48,39 @@ public class ATM {
 			System.out.println();
 			System.out.print("> ");
 			String choice = scanner.nextLine().toUpperCase();
-			switch (choice) {
-			case "A":
-				openAccount();
-				break;
-			case "B":
-				getBalance();
-				break;
-			case "C":
-				deposit();
-				break;
-			case "D":
-				withdraw();
-				break;
-			case "E":
-				closeAccount();
-				break;
-			case "X":
-				listAccounts();
-				System.exit(0);
-			default:
-				System.out.println("Invalid input");
+			try {
+				switch (choice) {
+				case "A":
+					openAccount();
+					break;
+				case "B":
+					getBalance();
+					break;
+				case "C":
+					deposit();
+					break;
+				case "D":
+					withdraw();
+					break;
+				case "E":
+					closeAccount();
+					break;
+				case "X":
+					listAccounts();
+					System.exit(0);
+				default:
+					System.out.println("Invalid input");
+				}
+			} catch (BankException e) {
+				System.err.println("Error: "+ e.getMessage());
 			}
+			catch (NumberFormatException e) {
+				System.err.println("Error: ");
+				}
+			catch (NullPointerException e) {
+				System.err.println("Error: "+ e.getMessage());
+				}
+			
 			System.out.println("Hit Enter to continue...");
 			scanner.nextLine();
 		}
@@ -94,47 +105,29 @@ public class ATM {
 		System.out.printf("Account with accountnumber %d created %n", nr);
 	}
 	
-	private void getBalance() {
+	private void getBalance() throws BankException {
 		System.out.println("You chose to display the balance: ");
-		try {
-			System.out.printf("The balance of your account is: %.2f %n", bank.getBalance(this.scanNr(), this.scanPin()));
-		} catch (BankException e) {
-			System.err.println("Error: " + e.getMessage());
-		}
-
+		System.out.printf("The balance of your account is: %.2f %n", bank.getBalance(this.scanNr(), this.scanPin()));
 	}
 
-	private void deposit() {
+	private void deposit() throws BankException {
 		System.out.println("You chose to deposit money on your account. ");
-		try {
 			bank.deposit(this.scanNr(), this.scanAmount());
 			System.out.println("Deposit successful. ");
-		} catch (BankException e){
-			System.err.println("Error: " + e.getMessage());
-		}
 	}
 
-	private void withdraw() {
+	private void withdraw() throws BankException {
 		System.out.println("You chose to withdraw money of your account. ");
-		
-		try {
 			int nr = this.scanNr();
 			String pin = this.scanPin();
 			double amount = this.scanAmount();
 			bank.withdraw(nr, pin, amount);
 			System.out.println("Successful withdrawal.");
-		} catch (BankException e) {
-			System.err.println("Error: " + e.getMessage());
-		}
 	}
 
-	private void closeAccount() {
-		try {
+	private void closeAccount() throws BankException {
 			bank.closeAccount(this.scanNr(), this.scanPin());
 			System.out.println("Your account has been closed");
-		} catch (BankException e) {
-			System.err.println("Error: " + e.getMessage());
-		}
 	}
 
 	private void listAccounts() {

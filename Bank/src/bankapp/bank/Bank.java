@@ -48,8 +48,7 @@ public interface Bank {
 	 * @throws BankException
 	 *             - if the account does not exist or the pin is invalid
 	 */
-	Double getBalance(int nr, String pin) throws BankException;
-
+	double getBalance(int nr, String pin) throws BankException;
 	/**
 	 * Opens a bank account.
 	 * 

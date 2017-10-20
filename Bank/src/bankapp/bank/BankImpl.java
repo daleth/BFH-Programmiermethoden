@@ -70,7 +70,7 @@ public class BankImpl implements Bank {
 	 * 
 	 * @see bankapp.bank.Bank#getBalance(int, java.lang.String)
 	 */
-	public Double getBalance(int nr, String pin) throws BankException {
+	public double getBalance(int nr, String pin) throws BankException {
 		Account account = this.findAccount(nr);
 		account.checkPIN(pin);
 		return account.getBalance();
