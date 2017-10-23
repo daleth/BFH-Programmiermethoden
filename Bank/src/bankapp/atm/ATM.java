@@ -1,9 +1,12 @@
 package bankapp.atm;
 
-import java.util.ArrayList;
+import java.time.format.DateTimeFormatter;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 
 import bankapp.account.Account;
+import bankapp.account.Transaction;
 import bankapp.bank.AccountType;
 import bankapp.bank.Bank;
 import bankapp.bank.BankException;
@@ -18,9 +21,9 @@ public class ATM {
 	/** The scanner used to read the console input. */
 	private Scanner scanner = new Scanner(System.in);
 	/** The bank to which the ATM is connected. */
-	private Bank bank; // Unbedingt über Bank Interface ansprechen, damit die Implementierung stimmt. 
+	private Bank bank; // Unbedingt über Bank Interface ansprechen, damit die Implementierung stimmt.
 	/** The default initial balance when creating a new BankAccount */
-	private static final double DEFAULT_INITIAL_BALANCE = 0.0; 
+	private static final double DEFAULT_INITIAL_BALANCE = 0.0;
 
 	/**
 	 * Construct an automated teller machine.
@@ -40,7 +43,7 @@ public class ATM {
 			System.out.println("A     A   T    M  M  M");
 			System.out.println();
 			System.out.println("A  Open Account");
-			System.out.println("B  Get Balance");
+			System.out.println("B  Show Transactions");
 			System.out.println("C  Deposit");
 			System.out.println("D  Withdraw");
 			System.out.println("E  Close Account");
@@ -54,7 +57,7 @@ public class ATM {
 					openAccount();
 					break;
 				case "B":
-					getBalance();
+					showTransactions();
 					break;
 				case "C":
 					deposit();
@@ -72,17 +75,28 @@ public class ATM {
 					System.out.println("Invalid input");
 				}
 			} catch (BankException e) {
-				System.err.println("Error: "+ e.getMessage());
-			}
-			catch (NumberFormatException e) {
+				System.err.println("Error: " + e.getMessage());
+			} catch (NumberFormatException e) {
 				System.err.println("Error: Must enter a valid number. ");
-				}
-			catch (NullPointerException e) {
+			} catch (NullPointerException e) {
 				System.err.println("Error: Entered value cannot be null. ");
-				}
-			
+			}
+
 			System.out.println("Hit Enter to continue...");
 			scanner.nextLine();
+		}
+	}
+
+	private void showTransactions() throws BankException {
+		System.out.println("You chose to display your transactions: ");
+		List<Transaction> transactions = bank.getTransactions(scanNr(), scanPin());
+		System.out.printf("%10s | %12s | %12s | %n", "Valuta", "Amount", "Balance");
+		System.out.println("------------------------------------------");
+		Iterator<Transaction> iter = transactions.iterator();
+		while (iter.hasNext()) {
+			Transaction t = iter.next();
+			System.out.printf("%10s | %+12.2f | %+12.2f |%n",
+					t.getValuta().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")), t.getAmount(), t.getBalance());
 		}
 	}
 
@@ -94,7 +108,7 @@ public class ATM {
 		int nr = 0;
 		switch (choice) {
 		case "P":
-			nr = bank.openAccount( AccountType.PERSONAL, this.scanPin(), DEFAULT_INITIAL_BALANCE);
+			nr = bank.openAccount(AccountType.PERSONAL, this.scanPin(), DEFAULT_INITIAL_BALANCE);
 			break;
 		case "S":
 			nr = bank.openAccount(AccountType.SAVINGS, this.scanPin(), DEFAULT_INITIAL_BALANCE);
@@ -104,43 +118,38 @@ public class ATM {
 		}
 		System.out.printf("Account with accountnumber %d created %n", nr);
 	}
-	
-	private void getBalance() throws BankException {
-		System.out.println("You chose to display the balance: ");
-		System.out.printf("The balance of your account is: %.2f %n", bank.getBalance(this.scanNr(), this.scanPin()));
-	}
 
 	private void deposit() throws BankException {
 		System.out.println("You chose to deposit money on your account. ");
-			bank.deposit(this.scanNr(), this.scanAmount());
-			System.out.println("Deposit successful. ");
+		bank.deposit(this.scanNr(), this.scanAmount());
+		System.out.println("Deposit successful. ");
 	}
 
 	private void withdraw() throws BankException {
 		System.out.println("You chose to withdraw money of your account. ");
-			int nr = this.scanNr();
-			String pin = this.scanPin();
-			double amount = this.scanAmount();
-			bank.withdraw(nr, pin, amount);
-			System.out.println("Successful withdrawal.");
+		int nr = this.scanNr();
+		String pin = this.scanPin();
+		double amount = this.scanAmount();
+		bank.withdraw(nr, pin, amount);
+		System.out.println("Successful withdrawal.");
 	}
 
 	private void closeAccount() throws BankException {
-			bank.closeAccount(this.scanNr(), this.scanPin());
-			System.out.println("Your account has been closed");
+		bank.closeAccount(this.scanNr(), this.scanPin());
+		System.out.println("Your account has been closed");
 	}
 
 	private void listAccounts() {
-		
-		ArrayList<Account> accounts = bank.getAccounts();
+
+		List<Account> accounts = bank.getAccounts();
 		accounts.sort(new AccountComparator());
-		//Collections.sort(bank.getAccounts(), new AccountComparator());
-				
+		// Collections.sort(bank.getAccounts(), new AccountComparator());
+
 		for (Account account : accounts) {
-			
-			
-//			System.out.println(account.toString());
-			System.out.printf("Account Type: %-10s Number: %-4d%+12.2f\n", account.getType(), account.getNr(), account.getBalance());
+
+			// System.out.println(account.toString());
+			System.out.printf("Account Type: %-10s Number: %-4d%+12.2f\n", account.getType(), account.getNr(),
+					account.getBalance());
 		}
 	}
 

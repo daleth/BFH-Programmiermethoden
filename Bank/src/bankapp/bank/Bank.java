@@ -1,8 +1,9 @@
 package bankapp.bank;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import bankapp.account.Account;
+import bankapp.account.Transaction;
 
 public interface Bank {
 
@@ -35,7 +36,7 @@ public interface Bank {
 	 * 
 	 * @return the bank accounts
 	 */
-	ArrayList<Account> getAccounts();
+	List<Account> getAccounts();
 
 	/**
 	 * Gets the balance of an account.
@@ -49,6 +50,15 @@ public interface Bank {
 	 *             - if the account does not exist or the pin is invalid
 	 */
 	double getBalance(int nr, String pin) throws BankException;
+	/**
+	 * Gets the transactions of an account
+	 * @param nr - the account number
+	 * @param pin - the PIN of the account
+	 * @return the account transactions
+	 * @throws BankException - if the account does not exist or the pin is invalid
+	 */
+	List<Transaction> getTransactions(int nr, String pin) throws BankException;
+	
 	/**
 	 * Opens a bank account.
 	 * 
