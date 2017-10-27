@@ -56,6 +56,9 @@ public class BankImpl implements Bank {
 		if (acc != null)
 			return acc;
 		throw new BankException("Account not found");
+		
+//		if (accounts.containsKey(nr))
+//				return account.get(nr);
 	}
 
 	/**
@@ -64,7 +67,7 @@ public class BankImpl implements Bank {
 	 * @return the bank accounts
 	 */
 	public List<Account> getAccounts() {
-		return new ArrayList<Account>(accounts.values());
+		return new ArrayList<>(accounts.values());
 	}
 
 	/*
