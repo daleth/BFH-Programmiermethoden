@@ -1,9 +1,13 @@
 package bankapp.bank;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import bankapp.account.Account;
 import bankapp.account.PersonalAccount;
 import bankapp.account.SavingsAccount;
+import bankapp.account.Transaction;
 
 /**
  * 
@@ -13,7 +17,7 @@ import bankapp.account.SavingsAccount;
  */
 public class BankImpl implements Bank {
 	/** The bank accounts. **/
-	private ArrayList<Account> accounts = new ArrayList<>();
+	private HashMap<Integer, Account> accounts = new HashMap<>();
 
 	/** The last account number. */
 	private int lastAccountNr = 0;
@@ -26,7 +30,7 @@ public class BankImpl implements Bank {
 	public void closeAccount(int nr, String pin) throws BankException {
 		Account account = this.findAccount(nr);
 		account.checkPIN(pin);
-		this.accounts.remove(account);
+		this.accounts.remove(nr);
 
 	}
 
@@ -48,12 +52,13 @@ public class BankImpl implements Bank {
 	 * @return the account, or null if the account does not exist
 	 */
 	private Account findAccount(int nr) throws BankException {
-		for (Account account : accounts) {
-			if (account.getNr() == nr) {
-				return account;
-			}
-		}
+		Account acc = accounts.get(nr);
+		if (acc != null)
+			return acc;
 		throw new BankException("Account not found");
+		
+//		if (accounts.containsKey(nr))
+//				return account.get(nr);
 	}
 
 	/**
@@ -61,8 +66,8 @@ public class BankImpl implements Bank {
 	 * 
 	 * @return the bank accounts
 	 */
-	public ArrayList<Account> getAccounts() {
-		return this.accounts;
+	public List<Account> getAccounts() {
+		return new ArrayList<>(accounts.values());
 	}
 
 	/*
@@ -77,34 +82,6 @@ public class BankImpl implements Bank {
 	}
 
 	/**
-	 * Opens a personal bank account.
-	 * 
-	 * @param pin
-	 *            - the PIN of the account
-	 * @param balance
-	 *            - the initial balance
-	 * @return the account number
-	 */
-	private int openPersonalAccount(String pin, double balance) {
-		accounts.add(new PersonalAccount(++this.lastAccountNr, pin, balance));
-		return this.lastAccountNr;
-	}
-
-	/**
-	 * Opens a savings bank account.
-	 * 
-	 * @param pin
-	 *            - the PIN of the account
-	 * @param balance
-	 *            - the initial balance
-	 * @return the account number
-	 */
-	private int openSavingsAccount(String pin, double balance) {
-		accounts.add(new SavingsAccount(++this.lastAccountNr, pin, balance));
-		return this.lastAccountNr;
-	}
-
-	/**
 	 * Opens a bank account.
 	 * 
 	 * @param pin
@@ -116,18 +93,17 @@ public class BankImpl implements Bank {
 	 * @return the account number
 	 */
 	public int openAccount(AccountType type, String pin, double balance) {
-		int accountNumber = 0;
 		switch (type) {
 		case PERSONAL:
-			accountNumber = openPersonalAccount(pin, balance);
+			accounts.put(++this.lastAccountNr, new PersonalAccount(this.lastAccountNr, pin, balance));
 			break;
 		case SAVINGS:
-			accountNumber = openSavingsAccount(pin, balance);
+			accounts.put(++this.lastAccountNr, new SavingsAccount(this.lastAccountNr, pin, balance));
 			break;
 		default:
 			break;
 		}
-		return accountNumber;
+		return lastAccountNr;
 	}
 
 	/*
@@ -141,5 +117,15 @@ public class BankImpl implements Bank {
 		account.withdraw(amount);
 
 	}
+
+	@Override
+	public List<Transaction> getTransactions(int nr, String pin) throws BankException {
+		// TODO Auto-generated method stub
+		Account account = this.findAccount(nr); 
+		account.checkPIN(pin);
+		return account.getTransactions(); 
+	}
+	
+	
 
 }

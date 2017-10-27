@@ -1,5 +1,8 @@
 package bankapp.account;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import bankapp.bank.AccountType;
 import bankapp.bank.BankException;
 /**
@@ -20,6 +23,10 @@ public abstract class Account {
 	 * The account balance.
 	 */
 	protected double balance;
+	/**
+	 * The transactions of the account.
+	 */
+	private List<Transaction> transactions = new ArrayList<>();
 
 	/**
 	 * Constructs a bank account.
@@ -77,6 +84,7 @@ public abstract class Account {
 			throw new BankException("Not possible to deposit negative amounts");
 		} else { // Dieses else wäre nicht notwendig. 
 			this.balance = this.balance + amount;
+			this.transactions.add(new Transaction(amount, this.balance));
 		}
 	}
 
@@ -118,6 +126,8 @@ public abstract class Account {
 			throw new BankException("Not possible to withdraw negative amount.");
 		} else {
 			this.balance = this.balance - amount;
+			this.transactions.add(new Transaction(-amount, this.balance));
+
 		}
 	}
 
@@ -155,5 +165,12 @@ public abstract class Account {
 	@Override
 	public String toString() {
 		return String.format("AccountType = %s, nr = %d, balance = %.2f", this.getType(), this.nr, this.balance);
+	}
+	/**
+	 * Gets the transactions of the account
+	 * @return the account transactions
+	 */
+	public List<Transaction> getTransactions() {
+		return this.transactions;
 	}
 }
