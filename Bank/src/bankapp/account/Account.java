@@ -1,5 +1,6 @@
 package bankapp.account;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,11 @@ import bankapp.bank.BankException;
  * @author david
  *
  */
-public abstract class Account {
+public abstract class Account implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4054460978530416436L;
 	/**
 	 * The number of the account.
 	 */

@@ -14,7 +14,7 @@ public interface Bank {
 	 *            - the account number
 	 * @param pin
 	 *            - the PIN of the account
-	 * @return BankException - if the account does not exist or the pin is invalid
+	 * @throws BankException - if the account does not exist or the pin is invalid
 	 */
 	void closeAccount(int nr, String pin) throws BankException;
 
