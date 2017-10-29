@@ -11,6 +11,10 @@ import bankapp.bank.BankException;
  */
 public class SavingsAccount extends Account {
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8515025198645702073L;
+	/**
 	 * The withdraw limit.
 	 */
 	public static final double WITHDRAW_LIMIT = 1000.0;

@@ -1,5 +1,12 @@
 package bankapp.bank;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,10 +24,47 @@ import bankapp.account.Transaction;
  */
 public class BankImpl implements Bank {
 	/** The bank accounts. **/
-	private HashMap<Integer, Account> accounts = new HashMap<>();
+	private HashMap<Integer, Account> accounts;
 
 	/** The last account number. */
 	private int lastAccountNr = 0;
+
+	/** The name of the data file. */
+	private static String DATA_FILE;
+
+	/**
+	 * Constructs a bank.
+	 */
+	public BankImpl() {
+		// TODO implement BankImpl Constructor
+
+		File dir = new File("./data/");
+
+		if (!dir.exists()) {
+
+			try {
+				dir.mkdirs();
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+
+		DATA_FILE = "data/" + this.getClass().getName();
+		File file = new File(DATA_FILE);
+		if (file.exists()) {
+			this.loadData();
+		} else {
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			accounts = new HashMap<>();
+			this.saveData();
+		}
+
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -31,6 +75,8 @@ public class BankImpl implements Bank {
 		Account account = this.findAccount(nr);
 		account.checkPIN(pin);
 		this.accounts.remove(nr);
+		this.saveData();
+
 
 	}
 
@@ -42,6 +88,8 @@ public class BankImpl implements Bank {
 	public void deposit(int nr, double amount) throws BankException {
 		Account account = this.findAccount(nr);
 		account.deposit(amount);
+		this.saveData();
+
 	}
 
 	/**
@@ -56,9 +104,9 @@ public class BankImpl implements Bank {
 		if (acc != null)
 			return acc;
 		throw new BankException("Account not found");
-		
-//		if (accounts.containsKey(nr))
-//				return account.get(nr);
+
+		// if (accounts.containsKey(nr))
+		// return account.get(nr);
 	}
 
 	/**
@@ -103,6 +151,7 @@ public class BankImpl implements Bank {
 		default:
 			break;
 		}
+		this.saveData();
 		return lastAccountNr;
 	}
 
@@ -115,17 +164,57 @@ public class BankImpl implements Bank {
 		Account account = this.findAccount(nr);
 		account.checkPIN(pin);
 		account.withdraw(amount);
+		this.saveData();
+
 
 	}
 
 	@Override
 	public List<Transaction> getTransactions(int nr, String pin) throws BankException {
 		// TODO Auto-generated method stub
-		Account account = this.findAccount(nr); 
+		Account account = this.findAccount(nr);
 		account.checkPIN(pin);
-		return account.getTransactions(); 
+		return account.getTransactions();
 	}
-	
-	
+
+	/**
+	 * Loads the data of the bank from a file.
+	 */
+	private void loadData() {
+		// TODO Implement loadData()
+
+		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(DATA_FILE))) {
+
+			this.accounts = (HashMap<Integer, Account>) in.readObject();
+			this.lastAccountNr = (int) in.readObject();
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * Saves the data of the bank to a file.
+	 */
+	private void saveData() {
+		// TODO Implement saveData()
+		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(DATA_FILE))) {
+
+			out.writeObject(accounts);
+			out.writeObject(lastAccountNr);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
 
 }

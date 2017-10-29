@@ -1,5 +1,6 @@
 package bankapp.account;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
@@ -7,7 +8,11 @@ import java.time.LocalDate;
  * @author david
  *
  */
-public class Transaction {
+public class Transaction implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4626409460670570926L;
 	/** The amount of the transaction */
 	private double amount; 
 	/** The current account balance*/

@@ -10,6 +10,11 @@ import bankapp.bank.AccountType;
  */
 public class PersonalAccount extends Account {
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2110030590300170572L;
+
+	/**
 	 * Constructs a personal bank account.
 	 * 
 	 * @param nr
