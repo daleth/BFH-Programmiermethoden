@@ -36,6 +36,7 @@ public class BankImpl implements Bank {
 	 * Constructs a bank.
 	 */
 	public BankImpl() {
+		// TODO Laden des File nur in der loadData() 
 		DATA_FILE = "data/" + this.getClass().getName();
 		File file = new File(DATA_FILE);
 		if (file.exists()) {
@@ -172,9 +173,9 @@ public class BankImpl implements Bank {
 		// TODO Implement loadData()
 
 		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(DATA_FILE))) {
-
+			this.lastAccountNr = in.readInt();
 			this.accounts = (HashMap<Integer, Account>) in.readObject();
-			this.lastAccountNr = (int) in.readObject();
+			
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -182,7 +183,7 @@ public class BankImpl implements Bank {
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		} // Alternativ im Catch-Block die Objekte initialisieren, wenn kein File existiert. 
 
 	}
 
@@ -192,12 +193,12 @@ public class BankImpl implements Bank {
 	private void saveData() {
 		// TODO Implement saveData()
 		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(DATA_FILE))) {
-
-			out.writeObject(accounts);
 			out.writeObject(lastAccountNr);
+			out.writeObject(accounts);
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("Error: " + e);
 		}
 
 	}
