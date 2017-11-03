@@ -36,25 +36,13 @@ public class BankImpl implements Bank {
 	 * Constructs a bank.
 	 */
 	public BankImpl() {
-		// TODO implement BankImpl Constructor
-
-		File dir = new File("./data/");
-
-		if (!dir.exists()) {
-
-			try {
-				dir.mkdirs();
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
-		}
-
 		DATA_FILE = "data/" + this.getClass().getName();
 		File file = new File(DATA_FILE);
 		if (file.exists()) {
 			this.loadData();
 		} else {
 			try {
+				file.getParentFile().mkdirs();
 				file.createNewFile();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -188,9 +176,6 @@ public class BankImpl implements Bank {
 			this.accounts = (HashMap<Integer, Account>) in.readObject();
 			this.lastAccountNr = (int) in.readObject();
 
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
