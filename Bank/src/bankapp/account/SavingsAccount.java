@@ -14,6 +14,12 @@ public class SavingsAccount extends Account {
 	 * 
 	 */
 	private static final long serialVersionUID = 8515025198645702073L;
+	
+	/**
+	 * The interest rate.
+	 */
+	public static final double INTEREST_RATE = 0.01;
+	
 	/**
 	 * The withdraw limit.
 	 */
@@ -50,6 +56,11 @@ public class SavingsAccount extends Account {
 			// CAVE: Must explicit invoke super.withdraw() otherwise
 			// java.lang.StackOverflowError!
 		}
+	}
+
+	@Override
+	public double getInterestRate() {
+		return INTEREST_RATE;
 	}
 
 }

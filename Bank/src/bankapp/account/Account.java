@@ -6,16 +6,19 @@ import java.util.List;
 
 import bankapp.bank.AccountType;
 import bankapp.bank.BankException;
+
 /**
  * The class Account represents bank accounts.
+ * 
  * @author david
  *
  */
-public abstract class Account implements Serializable{
+public abstract class Account implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -4054460978530416436L;
+
 	/**
 	 * The number of the account.
 	 */
@@ -87,7 +90,7 @@ public abstract class Account implements Serializable{
 	public void deposit(double amount) throws BankException {
 		if (amount < 0) {
 			throw new BankException("Not possible to deposit negative amounts");
-		} else { // Dieses else wäre nicht notwendig. 
+		} else { // Dieses else wäre nicht notwendig.
 			this.balance = this.balance + amount;
 			this.transactions.add(new Transaction(amount, this.balance));
 		}
@@ -101,6 +104,13 @@ public abstract class Account implements Serializable{
 	public double getBalance() {
 		return this.balance;
 	}
+
+	/**
+	 * Gets the interest rate.
+	 * 
+	 * @return the interest rate
+	 */
+	public abstract double getInterestRate();
 
 	/**
 	 * Gets the number of the account.
@@ -117,6 +127,19 @@ public abstract class Account implements Serializable{
 	 * @return the account type
 	 */
 	public abstract AccountType getType();
+
+	/**
+	 * Pays interests to the account.
+	 */
+	public void payInterests() {
+		double interest = this.getBalance()*this.getInterestRate();
+		try {
+			this.deposit(interest);
+		} catch (BankException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * Withdraws money from the account.
@@ -151,7 +174,7 @@ public abstract class Account implements Serializable{
 		Account a = (Account) object;
 		return a.nr == nr;
 	}
-
+	
 	/**
 	 * Computes a hash code of the account.
 	 * 
@@ -171,8 +194,10 @@ public abstract class Account implements Serializable{
 	public String toString() {
 		return String.format("AccountType = %s, nr = %d, balance = %.2f", this.getType(), this.nr, this.balance);
 	}
+
 	/**
 	 * Gets the transactions of the account
+	 * 
 	 * @return the account transactions
 	 */
 	public List<Transaction> getTransactions() {
