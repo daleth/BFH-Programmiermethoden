@@ -59,9 +59,11 @@ public class BankImpl extends Thread implements Bank {
 
 		}	
 		// Initializing the Thread that pays interests periodically. 
-		Thread interestPayment = new Thread(this);
-		interestPayment.start();
-
+//		Thread interestPayment = new Thread(this);
+//		interestPayment.start();
+		
+		// Alternativ: 
+		this.start();
 	}
 
 	/*
@@ -186,25 +188,25 @@ public class BankImpl extends Thread implements Bank {
 	 * Periodically pays interests to the bank accounts.
 	 */
 	@Override
-	public void run() {
-		while (!interrupted()) {
+	public void run() { // run() Methode kann keine Exceptions implementieren
+		while (true) {
 			try {
-				sleep(INTEREST_PERIOD);
+				Thread.sleep(INTEREST_PERIOD); // statische Methoden mit der Klasse aufrufen (Stilfrage). Kann aber auch über ein Objekt aufgerufen werden. 
+				for (Account acc : getAccounts()) {
+				acc.payInterests(); 
+				}
+				this.saveData(); // Do not forget to save the data!
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				break;
 			}
-			for (Account acc : getAccounts()) {
-				acc.payInterests();
-			}
-			this.saveData(); // Do not forget to save the data!
+			
 		}
 	}
 
 	/**
 	 * Saves the data of the bank to a file.
 	 */
-	private void saveData() {
+	private synchronized void saveData()  {
 		// TODO Implement saveData()
 		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(DATA_FILE))) {
 			out.writeInt(lastAccountNr);

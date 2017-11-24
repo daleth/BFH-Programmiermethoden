@@ -87,7 +87,7 @@ public abstract class Account implements Serializable {
 	 * @throws BankException
 	 *             - if the deposit failed
 	 */
-	public void deposit(double amount) throws BankException {
+	public synchronized void deposit(double amount) throws BankException {
 		if (amount < 0) {
 			throw new BankException("Not possible to deposit negative amounts");
 		} else { // Dieses else wäre nicht notwendig.
@@ -131,10 +131,11 @@ public abstract class Account implements Serializable {
 	/**
 	 * Pays interests to the account.
 	 */
-	public void payInterests() {
+	public synchronized void payInterests() {
 		double interest = this.getBalance()*this.getInterestRate();
 		try {
-			this.deposit(interest);
+			this.deposit(interest); // Aufpassen, dass der Zins auch negativ sein kann. 
+			// oder balance = Math.round(100 * (balance + interest)) / 100.0;
 		} catch (BankException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -149,7 +150,7 @@ public abstract class Account implements Serializable {
 	 * @throws BankException
 	 *             - if the withdrawal failed
 	 */
-	public void withdraw(double amount) throws BankException {
+	public synchronized void withdraw(double amount) throws BankException {
 		if (amount < 0) {
 			throw new BankException("Not possible to withdraw negative amount.");
 		} else {
