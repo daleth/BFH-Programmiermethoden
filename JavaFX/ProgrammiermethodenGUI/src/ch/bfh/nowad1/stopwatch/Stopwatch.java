@@ -88,7 +88,7 @@ public class Stopwatch extends BorderPane {
 		stopButton.addEventHandler(ActionEvent.ACTION, event -> {
 			System.out.println("Stop Button clicked"); 
 			timer.stop();
-			startButton.setDisable(false);
+			startButton.setDisable(false); 
 			stopButton.setDisable(true);
 			statusLabel.setText("stopped");
 
