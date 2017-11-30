@@ -27,13 +27,15 @@ public class Main extends Application {
 		root.setHgap(10.0);
 		root.setVgap(10.0);
 
+		// Declaring Labels
 		Label ageLabel = new Label("Alter [Jahre]: ");
 		Label weightLabel = new Label("Gewicht [kg]: ");
 		Label creaLabel = new Label("Serum-Kreatinin [mg/dl]: ");
 		Label sexLabel = new Label("Geschlecht: ");
 		Label GFRLabel = new Label("GFR: ");
 		Label ResultLabel = new Label("...");
-
+		
+		// Adding every Label to the GridPane
 		root.add(ageLabel, 0, 0);
 		root.add(weightLabel, 0, 1);
 		root.add(creaLabel, 0, 2);
@@ -47,41 +49,42 @@ public class Main extends Application {
 		for (int i = 1; i < 100; i++) {
 			options.add(Integer.valueOf(i));
 		}
-		// Instanciate a new ComboBox
+		// Instantiate a new ComboBox for the age
 		ComboBox<Integer> age = new ComboBox<>(options);
 
-		root.add(age, 1, 0, GridPane.REMAINING, 1);
-
+		// Defining the text Field for the weight
 		TextField weight = new TextField();
 
-		root.add(weight, 1, 1, GridPane.REMAINING, 1);
+		// Defining the text Field for the weight
 		TextField crea = new TextField();
-		root.add(crea, 1, 2, GridPane.REMAINING, 1);
 
+		// Defining the Toggle group and the radio buttons for the gender
 		final ToggleGroup tg = new ToggleGroup();
 		RadioButton rbFemale = new RadioButton("weiblich");
 		rbFemale.setToggleGroup(tg);
-		rbFemale.setUserData(Sex.female);
+		rbFemale.setUserData(Gender.female);
 
 		RadioButton rbMale = new RadioButton("männlich");
 		rbMale.setToggleGroup(tg);
-		rbMale.setUserData(Sex.male);
+		rbMale.setUserData(Gender.male);
 
-		root.add(rbFemale, 1, 3);
-		root.add(rbMale, 2, 3);
-
-
+		// Defining the calculate Button
 		calculateButton = new Button("Berechnen");
-				
-		root.add(calculateButton, 1, 5);
-		
-
 		calculateButton.addEventHandler(ActionEvent.ACTION, event -> {
-			ResultLabel
-					.setText(String.format("%.2f", calculate(age.getValue().intValue(), Double.parseDouble(weight.getText()),
-							Double.parseDouble(crea.getText()), (Sex) tg.getSelectedToggle().getUserData())));
+			ResultLabel.setText(
+					String.format("%.2f", calculate(age.getValue().intValue(), Double.parseDouble(weight.getText()),
+							Double.parseDouble(crea.getText()), (Gender) tg.getSelectedToggle().getUserData())));
 		});
 
+		// Add elements to the Pane
+		root.add(age, 1, 0, GridPane.REMAINING, 1);
+		root.add(weight, 1, 1, GridPane.REMAINING, 1);
+		root.add(crea, 1, 2, GridPane.REMAINING, 1);
+		root.add(rbFemale, 1, 3);
+		root.add(rbMale, 2, 3);
+		root.add(calculateButton, 1, 5);
+
+		// Define the Stage
 		primaryStage.setTitle("Cockcroft-Gault-Formel");
 		primaryStage.setScene(new Scene(root, 400, 250));
 		primaryStage.show();
@@ -92,7 +95,7 @@ public class Main extends Application {
 		launch(args);
 	}
 
-	private double calculate(int age, double weight, double creatinin, Sex sex) {
+	private double calculate(int age, double weight, double creatinin, Gender sex) {
 		return (((140 - age) * weight) / (72 * creatinin)) * sex.factor;
 	}
 }
