@@ -50,7 +50,7 @@ public class Main extends Application {
 		// Instanciate a new ComboBox
 		ComboBox<Integer> age = new ComboBox<>(options);
 
-		root.add(age, 1, 0);
+		root.add(age, 1, 0, GridPane.REMAINING, 1);
 
 		TextField weight = new TextField();
 
@@ -83,7 +83,7 @@ public class Main extends Application {
 		});
 
 		primaryStage.setTitle("Cockcroft-Gault-Formel");
-		primaryStage.setScene(new Scene(root, 400, 300));
+		primaryStage.setScene(new Scene(root, 400, 250));
 		primaryStage.show();
 
 	}
