@@ -8,11 +8,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+
+import java.util.Observable;
+import java.util.Observer;
+
 import ch.bfh.lph2.stopwatch.Timer;
 
-public class Stopwatch extends BorderPane {
+public class Stopwatch extends BorderPane implements Observer{
 
-	Timer timer;
+	Timer timer	;
 
 	Button startButton;
 	Button stopButton;
@@ -21,8 +25,9 @@ public class Stopwatch extends BorderPane {
 	Label counterLabel;
 	Label statusLabel;
 
-	public Stopwatch() {
-		timer = new Timer(100);
+	public Stopwatch(Timer timer) {
+		this.timer = timer;
+		this.timer.addObserver(this);
 		// Creating necessary BorderPanes and HBoxes
 
 		HBox buttonBox = new HBox();
@@ -81,44 +86,32 @@ public class Stopwatch extends BorderPane {
 		startButton.addEventHandler(ActionEvent.ACTION, event -> {
 			System.out.println("Start Button clicked");
 			timer.start();
-			stopButton.setDisable(false);
-			startButton.setDisable(true);
-			statusLabel.setText("started");
 		});
 
 		stopButton.addEventHandler(ActionEvent.ACTION, event -> {
 			System.out.println("Stop Button clicked");
 			timer.stop();
-			startButton.setDisable(false);
-			stopButton.setDisable(true);
-			statusLabel.setText("stopped");
-
 		});
 		// Kurzform setOnAction
 		resetButton.setOnAction(event -> {
 			System.out.println("Reset Button clicked");
 			timer.reset();
-			if (!timer.isRunning()) {
-				startButton.setDisable(false);
-				stopButton.setDisable(true);
-				statusLabel.setText("resetted");
-			}
-
 		});
-		// Erst am Ende des Konstruktors, damit es nicht mitten im Konstruktor
-		// herausgerissen wird.
-		timer.attach(this);
+
 	}
 
 	public void update() {
 		Platform.runLater(() -> {
+			
 			counterLabel.setText(timer.getTimeString());
 			// Buttons update hier machen und nicht im lambda, ist jedoch nicht ganz
 			// effizient, da alle paar Sekunden ein update gemacht werden muss.
 			startButton.setDisable(timer.isRunning());
 			stopButton.setDisable(!timer.isRunning());
 			resetButton.setDisable(timer.isRunning());
-
+			
+			
+			
 			if (timer.isRunning()) {
 				statusLabel.setText("running");
 			} else {
@@ -126,6 +119,11 @@ public class Stopwatch extends BorderPane {
 			}
 		});
 
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		this.update();
 	}
 
 }
