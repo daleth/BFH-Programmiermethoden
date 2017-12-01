@@ -12,13 +12,15 @@ import ch.bfh.lph2.stopwatch.Timer;
 
 public class Stopwatch extends BorderPane {
 
-	Timer timer; 
+	Timer timer;
+
 	Button startButton;
 	Button stopButton;
 	Button resetButton;
 
-	Label counterLabel; 
+	Label counterLabel;
 	Label statusLabel;
+
 	public Stopwatch() {
 		timer = new Timer(100);
 		// Creating necessary BorderPanes and HBoxes
@@ -57,28 +59,27 @@ public class Stopwatch extends BorderPane {
 		// Add all Buttons to the buttonBox and set spacing and padding and alignment
 		buttonBox.setAlignment(Pos.CENTER);
 
-		buttonBox.getChildren().addAll(startButton,stopButton,resetButton);
+		buttonBox.getChildren().addAll(startButton, stopButton, resetButton);
 		buttonBox.setSpacing(20);
-		//buttonBox.setPadding(new Insets(0,10,0,10));
+		// buttonBox.setPadding(new Insets(0,10,0,10));
 
 		// Creating status label and set Padding
 
 		statusLabel = new Label("stopped");
-		statusLabel.setPadding(new Insets(5,5,0,5));
+		statusLabel.setPadding(new Insets(5, 5, 0, 5));
 
 		// Compose bottom pane
 		bottom.setTop(buttonBox);
 		bottom.setBottom(statusLabel);
 
 		// Compose main pane
-		this.setCenter(contentBox);		
+		this.setCenter(contentBox);
 		this.setBottom(bottom);
 		this.setPadding(new Insets(10));
 
-
 		// Button Functionality
 		startButton.addEventHandler(ActionEvent.ACTION, event -> {
-			System.out.println("Start Button clicked"); 
+			System.out.println("Start Button clicked");
 			timer.start();
 			stopButton.setDisable(false);
 			startButton.setDisable(true);
@@ -86,41 +87,45 @@ public class Stopwatch extends BorderPane {
 		});
 
 		stopButton.addEventHandler(ActionEvent.ACTION, event -> {
-			System.out.println("Stop Button clicked"); 
+			System.out.println("Stop Button clicked");
 			timer.stop();
-			startButton.setDisable(false); 
+			startButton.setDisable(false);
 			stopButton.setDisable(true);
 			statusLabel.setText("stopped");
 
 		});
-
-		resetButton.addEventHandler(ActionEvent.ACTION, event -> {
-			System.out.println("Reset Button clicked"); 
+		// Kurzform setOnAction
+		resetButton.setOnAction(event -> {
+			System.out.println("Reset Button clicked");
 			timer.reset();
 			if (!timer.isRunning()) {
 				startButton.setDisable(false);
-				stopButton.setDisable(true); 
+				stopButton.setDisable(true);
 				statusLabel.setText("resetted");
 			}
-			
-			
-		});
 
+		});
+		// Erst am Ende des Konstruktors, damit es nicht mitten im Konstruktor
+		// herausgerissen wird.
 		timer.attach(this);
 	}
 
 	public void update() {
 		Platform.runLater(() -> {
-		counterLabel.setText(timer.getTimeString());
-		if (timer.isRunning()) {
-			statusLabel.setText("running");
-		} else {
-			statusLabel.setText("stopped");
-		}	
+			counterLabel.setText(timer.getTimeString());
+			// Buttons update hier machen und nicht im lambda, ist jedoch nicht ganz
+			// effizient, da alle paar Sekunden ein update gemacht werden muss.
+			startButton.setDisable(timer.isRunning());
+			stopButton.setDisable(!timer.isRunning());
+			resetButton.setDisable(timer.isRunning());
+
+			if (timer.isRunning()) {
+				statusLabel.setText("running");
+			} else {
+				statusLabel.setText("stopped");
+			}
 		});
-		
+
 	}
 
-
 }
-

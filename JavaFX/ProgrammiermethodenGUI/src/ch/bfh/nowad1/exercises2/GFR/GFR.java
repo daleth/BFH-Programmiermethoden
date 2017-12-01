@@ -1,6 +1,5 @@
 package ch.bfh.nowad1.exercises2.GFR;
 
-import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 
 public class GFR extends BorderPane {
@@ -17,7 +16,6 @@ public class GFR extends BorderPane {
 		this.factor = factor; 
 	}
 }
-	private Button calculateButton;
 		
 	public GFR() {
 		
