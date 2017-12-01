@@ -2,7 +2,6 @@ package bankapp.bank;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -22,21 +21,26 @@ import bankapp.account.Transaction;
  * 
  *         The class Bank manages bank accounts and executes bank transactions.
  */
-public class BankImpl implements Bank {
+public class BankImpl extends Thread implements Bank {
+	/**
+	 * The interest period (in milliseconds).
+	 */
+	private static long INTEREST_PERIOD = 10000L;
+
+	/** The name of the data file. */
+	private static String DATA_FILE;
+
 	/** The bank accounts. **/
 	private HashMap<Integer, Account> accounts;
 
 	/** The last account number. */
 	private int lastAccountNr = 0;
 
-	/** The name of the data file. */
-	private static String DATA_FILE;
-
 	/**
 	 * Constructs a bank.
 	 */
 	public BankImpl() {
-		// TODO Laden des File nur in der loadData() 
+		// TODO Laden des File nur in der loadData()
 		DATA_FILE = "data/" + this.getClass().getName();
 		File file = new File(DATA_FILE);
 		if (file.exists()) {
@@ -51,8 +55,15 @@ public class BankImpl implements Bank {
 			}
 			accounts = new HashMap<>();
 			this.saveData();
-		}
+			
 
+		}	
+		// Initializing the Thread that pays interests periodically. 
+//		Thread interestPayment = new Thread(this);
+//		interestPayment.start();
+		
+		// Alternativ: 
+		this.start();
 	}
 
 	/*
@@ -65,7 +76,6 @@ public class BankImpl implements Bank {
 		account.checkPIN(pin);
 		this.accounts.remove(nr);
 		this.saveData();
-
 
 	}
 
@@ -118,6 +128,36 @@ public class BankImpl implements Bank {
 		return account.getBalance();
 	}
 
+	@Override
+	public List<Transaction> getTransactions(int nr, String pin) throws BankException {
+		// TODO Auto-generated method stub
+		Account account = this.findAccount(nr);
+		account.checkPIN(pin);
+		return account.getTransactions();
+	}
+
+	/**
+	 * Loads the data of the bank from a file.
+	 */
+	@SuppressWarnings("unchecked")
+	private void loadData() {
+		// TODO Implement loadData()
+
+		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(DATA_FILE))) {
+			this.lastAccountNr = in.readInt();
+			this.accounts = (HashMap<Integer, Account>) in.readObject();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} // Alternativ im Catch-Block die Objekte initialisieren, wenn kein File
+		// existiert.
+
+	}
+
 	/**
 	 * Opens a bank account.
 	 * 
@@ -144,6 +184,41 @@ public class BankImpl implements Bank {
 		return lastAccountNr;
 	}
 
+	/**
+	 * Periodically pays interests to the bank accounts.
+	 */
+	@Override
+	public void run() { // run() Methode kann keine Exceptions implementieren
+		while (true) {
+			try {
+				Thread.sleep(INTEREST_PERIOD); // statische Methoden mit der Klasse aufrufen (Stilfrage). Kann aber auch über ein Objekt aufgerufen werden. 
+				for (Account acc : getAccounts()) {
+				acc.payInterests(); 
+				}
+				this.saveData(); // Do not forget to save the data!
+			} catch (InterruptedException e) {
+				break;
+			}
+			
+		}
+	}
+
+	/**
+	 * Saves the data of the bank to a file.
+	 */
+	private synchronized void saveData()  {
+		// TODO Implement saveData()
+		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(DATA_FILE))) {
+			out.writeInt(lastAccountNr);
+			out.writeObject(accounts);
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.err.println("Error: " + e);
+		}
+
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -154,52 +229,6 @@ public class BankImpl implements Bank {
 		account.checkPIN(pin);
 		account.withdraw(amount);
 		this.saveData();
-
-
-	}
-
-	@Override
-	public List<Transaction> getTransactions(int nr, String pin) throws BankException {
-		// TODO Auto-generated method stub
-		Account account = this.findAccount(nr);
-		account.checkPIN(pin);
-		return account.getTransactions();
-	}
-
-	/**
-	 * Loads the data of the bank from a file.
-	 */
-	private void loadData() {
-		// TODO Implement loadData()
-
-		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(DATA_FILE))) {
-			this.lastAccountNr = in.readInt();
-			this.accounts = (HashMap<Integer, Account>) in.readObject();
-			
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} // Alternativ im Catch-Block die Objekte initialisieren, wenn kein File existiert. 
-
-	}
-
-	/**
-	 * Saves the data of the bank to a file.
-	 */
-	private void saveData() {
-		// TODO Implement saveData()
-		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(DATA_FILE))) {
-			out.writeObject(lastAccountNr);
-			out.writeObject(accounts);
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.err.println("Error: " + e);
-		}
 
 	}
 

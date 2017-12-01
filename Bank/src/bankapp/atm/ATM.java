@@ -70,7 +70,7 @@ public class ATM {
 					break;
 				case "X":
 					listAccounts();
-					System.exit(0);
+					System.exit(0); // Terminiert alle Threads, die das Programm aufgerufen hat. 
 				default:
 					System.out.println("Invalid input");
 				}

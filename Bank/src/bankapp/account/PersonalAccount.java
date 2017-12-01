@@ -13,6 +13,11 @@ public class PersonalAccount extends Account {
 	 * 
 	 */
 	private static final long serialVersionUID = -2110030590300170572L;
+	
+	/**
+	 * The interest rate.
+	 */
+	private static final double INTEREST_RATE = 0.005;
 
 	/**
 	 * Constructs a personal bank account.
@@ -31,5 +36,10 @@ public class PersonalAccount extends Account {
 	@Override
 	public AccountType getType() {
 		return AccountType.PERSONAL;
+	}
+
+	@Override
+	public double getInterestRate() {
+		return INTEREST_RATE;
 	}
 }
