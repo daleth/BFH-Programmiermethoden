@@ -1,13 +1,13 @@
 package ch.bfh.lph2.stopwatch;
 
-import ch.bfh.nowad1.stopwatch.Stopwatch;
+import java.util.Observable;
 
 /**
  * This class implements the functionality of a timer. A timer can be started,
  * stopped and reset. A timer notifies an attached {@code Stopwatch} about state
  * changes by calling the {@code update} method of the {@code Stopwatch}.
  */
-public class Timer implements Runnable {
+public class Timer extends Observable implements Runnable {
 
 	/**
 	 * The number of ticks.
@@ -18,11 +18,6 @@ public class Timer implements Runnable {
 	 * The time interval (in milliseconds) of a tick.
 	 */
 	private int interval;
-
-	/**
-	 * The stopwatch gui which is notified by the timer.
-	 */
-	private Stopwatch gui;
 
 	/**
 	 * The thread which triggers the ticks. Is null if the timer is not running.
@@ -38,15 +33,10 @@ public class Timer implements Runnable {
 	public Timer(int interval) {
 		this.interval = interval;
 	}
-
-	/**
-	 * Attaches a Gui to the timer
-	 * 
-	 * @param gui
-	 *            the stopwatch to attach to the timer
-	 */
-	public final void attach(Stopwatch gui) {
-		this.gui = gui;
+	
+	public void setInterval(int interval) {
+		this.interval = interval;
+		this.reset();
 	}
 
 	/**
@@ -112,7 +102,8 @@ public class Timer implements Runnable {
 			thread.setDaemon(true);
 			thread.setPriority(Thread.MAX_PRIORITY);
 			thread.start();
-			gui.update();
+			this.setChanged();
+			this.notifyObservers();
 		}
 	}
 
@@ -123,7 +114,8 @@ public class Timer implements Runnable {
 		if (thread != null) {
 			thread = null;
 		}
-		gui.update();
+		this.setChanged();
+		this.notifyObservers();
 	}
 
 	/**
@@ -131,7 +123,8 @@ public class Timer implements Runnable {
 	 */
 	public final void reset() {
 		ticks = 0;
-		gui.update();
+		this.setChanged();
+		this.notifyObservers();
 	}
 
 	/**
@@ -147,7 +140,8 @@ public class Timer implements Runnable {
 			}
 			if (thread != null) {
 				ticks++;
-				gui.update();
+				this.setChanged();
+				this.notifyObservers();
 			}
 		}
 	}
