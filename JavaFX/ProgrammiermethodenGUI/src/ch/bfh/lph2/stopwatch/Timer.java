@@ -33,6 +33,11 @@ public class Timer extends Observable implements Runnable {
 	public Timer(int interval) {
 		this.interval = interval;
 	}
+	
+	public void setInterval(int interval) {
+		this.interval = interval;
+		this.reset();
+	}
 
 	/**
 	 * Gets the time of the timer.
