@@ -36,10 +36,10 @@ fx:controller="ch.bfh.nowad1.dataEditor.DataEditorController">
       </HBox>
    </top>
    <center>
-      <TableView >
+      <TableView fx:id="table">
         <columns>
-          <TableColumn minWidth="50.0" prefWidth="100" text="Name" />
-          <TableColumn minWidth="50.0" prefWidth="100" text="Quantity" />
+          <TableColumn fx:id="colName" minWidth="50.0" prefWidth="100" text="Name" />
+          <TableColumn fx:id="colQuant" minWidth="50.0" prefWidth="100" text="Quantity" />
         </columns>
       </TableView>
    </center>
