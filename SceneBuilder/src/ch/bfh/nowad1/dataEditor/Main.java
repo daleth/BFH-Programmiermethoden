@@ -10,6 +10,7 @@ public class Main extends Application {
 		Model model = new Model();
 		new PieChartStage(model);
 		new DataEditorStage(model);
+		new DataEditorStage(model);
 
 
 	}

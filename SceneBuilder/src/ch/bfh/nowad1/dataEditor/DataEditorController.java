@@ -47,6 +47,7 @@ public class DataEditorController implements Observer {
 	// Called by FXMLLoader after the node hierarchy has been created
 	@FXML
 	protected void initialize() {
+		this.data = table.getItems();
 		colName.setCellValueFactory(new PropertyValueFactory<>("name"));
 		colQuant.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 		table.setEditable(true);
@@ -55,7 +56,6 @@ public class DataEditorController implements Observer {
 
 	public void init(Model model) {
 		this.model = model;
-		this.data = table.getItems();
 		for (String name : this.model.getNames()) {
 			Data d = new Data(name, this.model.getQuantity(name));
 			this.data.add(d);
