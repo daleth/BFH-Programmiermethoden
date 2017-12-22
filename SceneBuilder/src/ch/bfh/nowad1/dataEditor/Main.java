@@ -7,9 +7,9 @@ import javafx.stage.Stage;
 public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-
-		new DataEditorStage();
-		
+		Model model = new Model();
+		new PieChartStage(model);
+		new DataEditorStage(model);
 
 
 	}
